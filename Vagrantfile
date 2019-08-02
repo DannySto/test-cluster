@@ -50,7 +50,7 @@ $configureBox = <<-SCRIPT
     curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
     cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
     deb http://apt.kubernetes.io/ kubernetes-xenial main
-EOF
+    EOF
     apt-get update
     apt-get install -y kubelet kubeadm kubectl
     apt-mark hold kubelet kubeadm kubectl
@@ -84,8 +84,8 @@ $configureMaster = <<-SCRIPT
 
     # install Calico pod network addon
     export KUBECONFIG=/etc/kubernetes/admin.conf
-    kubectl apply -f https://raw.githubusercontent.com/ecomm-integration-ballerina/kubernetes-cluster/master/calico/rbac-kdd.yaml
-    kubectl apply -f https://raw.githubusercontent.com/ecomm-integration-ballerina/kubernetes-cluster/master/calico/calico.yaml
+    kubectl apply -f https://github.com/DannySto/test-cluster/blob/master/calico/rbac-kdd.yaml
+    kubectl apply -f https://github.com/DannySto/test-cluster/blob/master/calico/calico.yaml
 
     kubeadm token create --print-join-command >> /etc/kubeadm_join_cmd.sh
     chmod +x /etc/kubeadm_join_cmd.sh
@@ -99,7 +99,7 @@ SCRIPT
 $configureNode = <<-SCRIPT
     echo "This is worker"
     apt-get install -y sshpass
-    sshpass -p "vagrant" scp -o StrictHostKeyChecking=no vagrant@192.168.205.10:/etc/kubeadm_join_cmd.sh .
+    sshpass -p "vagrant" scp -o StrictHostKeyChecking=no vagrant@192.168.0.10:/etc/kubeadm_join_cmd.sh .
     sh ./kubeadm_join_cmd.sh
 SCRIPT
 
